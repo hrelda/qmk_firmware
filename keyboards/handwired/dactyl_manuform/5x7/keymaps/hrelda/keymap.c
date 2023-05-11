@@ -6,10 +6,9 @@
 // entirely and just use numbers.
 #define _PDVORAK 0 // programmero dvorak base layer
 #define _SHIFTED_PDVORAK 1 
-#define _QWERTY 2
-//#define _QWERTY_DS 3 //shift on both thumbs qwerty
 #define _FN 4
 #define _LH_DEBUG 5
+#define _QWERTY 6
 
 // Some basic macros
 #define TASK   LCTL(LSFT(KC_ESC))
@@ -20,11 +19,28 @@
 //
 //tap dance
 enum {
-    TD_CAPS_WORD,
+    TD_CAPS_WORD, //capword, caps lock, single press turns off capslock
+    TD_RCTLALT, // ctrl, alt
 };
 
+void td_fn_capsw_toggle(tap_dance_state_t *state, void *user_data)
+{
+    if(state->count == 1) {
+        //if caps is on turn it off, otherwise turn on caps word
+        if(host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
+            register_code(KC_CAPS);
+        } else {
+            caps_word_toggle();
+        }
+    } else {
+       register_code(KC_CAPS);
+    }
+}
+
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_CAPS_WORD] = ACTION_TAP_DANCE_DOUBLE(CW_TOGG,KC_CAPS),
+    [TD_CAPS_WORD] = ACTION_TAP_DANCE_FN(td_fn_capsw_toggle),
+    //[TD_CAPS_WORD] = ACTION_TAP_DANCE_DOUBLE(QK_CAPS_WORD_TOGGLE,KC_CAPS),
+    [TD_RCTLALT]   = ACTION_TAP_DANCE_DOUBLE(KC_RCTL,KC_RALT),
 };
 
 
@@ -35,12 +51,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        //LSFT(KC_4),            LSFT(KC_EQUAL),  KC_LBRC,   LSFT(KC_LBRC),  LSFT(KC_9),   LSFT(KC_7),  KC_EQUAL,
 //LBRC = left bracket , LCBR = left curly brace , LPRN = left parenthesis 
         KC_DOLLAR,             KC_PLUS,         KC_LBRC,   KC_LCBR,        KC_LPRN,      KC_AMPERSAND, KC_EQUAL,
-        KC_TAB,                KC_SEMICOLON,    KC_COMMA,  KC_DOT,         KC_P,         KC_Y,        TO(_QWERTY),
+        KC_TAB,                KC_SEMICOLON,    KC_COMMA,  KC_DOT,         KC_P,         KC_Y,        TO(_LH_DEBUG),
         KC_ESCAPE,             KC_A,            KC_O,      KC_E,           KC_U,         KC_I,        TO(_FN),
         MO(_SHIFTED_PDVORAK),  KC_QUOTE,        KC_Q,      KC_J,           KC_K,         KC_X,
         TT(_FN),               TD(TD_CAPS_WORD),KC_LEFT,   KC_RIGHT,
                                                                             KC_BACKSPACE,         KC_DELETE,
-                                                                            OSM(MOD_LCTL),  OSM(MOD_LALT),
+                                                                            KC_LCTL,  KC_LALT,
                                                                             KC_END,            KC_HOME,
         // right hand
         //LSFT(KC_8),    LSFT(KC_3),  LSFT(KC_0),  LSFT(KC_RBRC),  KC_RBRC,  LSFT(KC_1),  LSFT(KC_2),
@@ -49,11 +65,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_BACKSLASH,  KC_F,        KC_G,        KC_C,           KC_R,     KC_L,        KC_SLASH,
         KC_GRAVE,      KC_D,        KC_H,        KC_T,           KC_N,     KC_S,        KC_MINUS,
                        KC_B,        KC_M,        KC_W,           KC_V,     KC_Z,        MO(_SHIFTED_PDVORAK),
-                                                 //KC_DOWN,        KC_UP,    LSFT(KC_6),  LSFT(KC_5),
-                                               KC_DOWN,        KC_UP,    KC_CIRCUMFLEX,  KC_PERCENT,
+                                                 KC_DOWN,        KC_UP,    KC_CIRCUMFLEX,  KC_PERCENT,
                   KC_ENTER,      KC_SPACE,
-                  KC_PGUP,       KC_PGDN,
-                  OSM(MOD_RCTL), OSM(KC_RGUI)
+                  KC_LGUI,       TD(TD_RCTLALT),
+                  KC_PGUP,       KC_PGDN
 
     ),
     [_SHIFTED_PDVORAK] = LAYOUT_5x7(
@@ -79,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FN] = LAYOUT_5x7(
         // left hand
         QK_BOOT,   KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,    KC_F6,
-        KC_VOLU,   _______,     _______,     _______,     _______,     _______,  TO(_PDVORAK),
+        KC_VOLU,   _______,     LCTL(KC_W),  _______,     _______,     _______,  TO(_PDVORAK),
         KC_VOLD,   LCTL(KC_A),  LCTL(KC_S),  LCTL(KC_D),  LCTL(KC_F),  _______,  TO(_QWERTY),
         KC_MUTE,   LCTL(KC_Z),  LCTL(KC_X),  LCTL(KC_C),  LCTL(KC_V),  TO(_LH_DEBUG),
         _______,   WIN_SS,      KC_CALC,     KC_MYCM,
@@ -124,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,      KC_Q,    KC_W,    KC_E,   KC_R,   KC_T,   TO(_PDVORAK),
         KC_LCTL,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
         OSM(MOD_LSFT),   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
-        TT(_FN),   KC_CAPS, KC_LEFT,   KC_RIGHT,
+        TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_BACKSPACE,         KC_DELETE,
                                                          OSM(MOD_LALT),  OSM(MOD_LCTL),
                                                          KC_END,            KC_HOME,
