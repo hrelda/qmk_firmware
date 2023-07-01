@@ -6,9 +6,10 @@
 // entirely and just use numbers.
 #define _PDVORAK 0 // programmero dvorak base layer
 #define _SHIFTED_PDVORAK 1 
-#define _FN 4
+#define _FN 10
 #define _LH_DEBUG 5
 #define _QWERTY 6
+#define _QWERTY_TWOSPC 7
 
 // Some basic macros
 #define TASK   LCTL(LSFT(KC_ESC))
@@ -25,6 +26,8 @@ enum {
 
 void td_fn_capsw_toggle(tap_dance_state_t *state, void *user_data)
 {
+    //wrote a function for this beacuse ACTION_TAP_DANCE_DBOULE only takes basic keycodes and
+    //caps word toggle was not working with the CAPSWORD keycode
     if(state->count == 1) {
         //if caps is on turn it off, otherwise turn on caps word
         if(host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)){
@@ -77,10 +80,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,      LSFT(KC_SEMICOLON),  LSFT(KC_COMMA),  LSFT(KC_DOT),  LSFT(KC_P),  LSFT(KC_Y),  TO(_QWERTY),
         KC_ESCAPE,   LSFT(KC_A),          LSFT(KC_O),      LSFT(KC_E),    LSFT(KC_U),  LSFT(KC_I),  TO(_FN),
         KC_TRNS,     LSFT(KC_QUOTE),      LSFT(KC_Q),      LSFT(KC_J),    LSFT(KC_K),  LSFT(KC_X),
-        KC_TRNS,     KC_TRNS,             KC_TRNS,         KC_TRNS,
+        KC_TRNS,     KC_TRNS,             LSFT(KC_LEFT),         LSFT(KC_RIGHT),
                                                                           KC_TRNS, KC_TRNS,
                                                                           KC_TRNS, KC_TRNS,
-                                                                          KC_TRNS, KC_TRNS,
+                                                                          LSFT(KC_END), LSFT(KC_HOME),
         // right hand
         LSFT(KC_8),          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        LSFT(KC_2),
         LSFT(KC_BACKSLASH),  LSFT(KC_F),  LSFT(KC_G),  LSFT(KC_C),  LSFT(KC_R),  LSFT(KC_L),  LSFT(KC_SLASH),
@@ -89,24 +92,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                   KC_TRNS, KC_TRNS,  
                   KC_TRNS, KC_TRNS,
-                  KC_TRNS, KC_TRNS
+                  LSFT(KC_PGUP), LSFT(KC_PGDN)
     ),
     [_FN] = LAYOUT_5x7(
         // left hand
         QK_BOOT,   KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,    KC_F6,
-        KC_VOLU,   _______,     LCTL(KC_W),  _______,     _______,     _______,  TO(_PDVORAK),
+        KC_VOLU,   _______,     LCTL(KC_W),  _______,     _______,     LCTL(KC_Y),  TO(_PDVORAK),
         KC_VOLD,   LCTL(KC_A),  LCTL(KC_S),  LCTL(KC_D),  LCTL(KC_F),  _______,  TO(_QWERTY),
         KC_MUTE,   LCTL(KC_Z),  LCTL(KC_X),  LCTL(KC_C),  LCTL(KC_V),  TO(_LH_DEBUG),
         _______,   WIN_SS,      KC_CALC,     KC_MYCM,
-                                    KC_F10, KC_F11,
+                                    _______, _______,
                                     _______, _______,
                                     _______, _______,
         // right hand
                           KC_F7,     KC_F8,           KC_F9,     KC_F10,    KC_F11,     KC_F12,       KC_NUM_LOCK,
                           _______,   KC_KP_ASTERISK,  KC_KP_7,   KC_KP_8,   KC_KP_9,    KC_KP_MINUS,  KC_SCROLL_LOCK,
-                          _______,   KC_KP_SLASH,     KC_KP_4,   KC_KP_5,   KC_KP_6,    KC_KP_PLUS,   _______,
+               TO(_QWERTY_TWOSPC),   KC_KP_SLASH,     KC_KP_4,   KC_KP_5,   KC_KP_6,    KC_KP_PLUS,   _______,
                                      _______,         KC_KP_1,   KC_KP_2,   KC_KP_3,    KC_KP_ENTER,      KC_KP_ENTER,
-                                                      _______,   KC_KP_0,   KC_KP_DOT,  _______,
+                                                      KC_KP_0,   KC_KP_DOT,  _______,   _______,
              KC_DEL, KC_ENTER,
              _______, _______,
              _______, _______
@@ -115,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         _______,   _______,  _______,  _______,  _______,  _______,    _______,
         _______,   LSFT(KC_F5), LCA(KC_B), _______,  KC_F5,  _______,    TO(_QWERTY),
-        _______,   KC_F5,  _______,  KC_F11,   KC_F10,  LSFT(KC_F11),  TO(_PDVORAK),
+        _______,   KC_F5,    _______,  KC_F11,   KC_F10,  LSFT(KC_F11),  TO(_PDVORAK),
         _______,   _______,  _______,  _______,  _______,  _______,
         _______,   _______,  _______,  _______,
                                     _______, _______,
@@ -141,6 +144,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         OSM(MOD_LSFT),   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
         TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_BACKSPACE,         KC_DELETE,
+                                                         OSM(MOD_LALT),  OSM(MOD_LCTL),
+                                                         KC_END,            KC_HOME,
+        // right hand
+                          KC_CALC, KC_6,    KC_7,    KC_8,     KC_9,     KC_0,     KC_EQUAL,
+                          KC_RBRC, KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     KC_BSLS,
+                          _______, KC_H,    KC_J,    KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
+                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  OSM(MOD_RSFT),
+                                            KC_DOWN, KC_UP,    KC_LBRC,  KC_RBRC,
+                  KC_ENTER,      KC_SPACE,
+                  KC_PGUP,       KC_PGDN,
+                  OSM(MOD_RCTL), OSM(KC_RGUI)
+    ),
+    [_QWERTY_TWOSPC] = LAYOUT_5x7( // left hand
+        KC_MINUS,    KC_1,    KC_2,    KC_3,   KC_4,   KC_5,   KC_GRAVE,
+        KC_TAB,      KC_Q,    KC_W,    KC_E,   KC_R,   KC_T,   TO(_PDVORAK),
+        KC_ESCAPE,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
+        OSM(MOD_LSFT),   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
+        TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
+                                                         KC_SPACE,         KC_BACKSPACE,
                                                          OSM(MOD_LALT),  OSM(MOD_LCTL),
                                                          KC_END,            KC_HOME,
         // right hand
