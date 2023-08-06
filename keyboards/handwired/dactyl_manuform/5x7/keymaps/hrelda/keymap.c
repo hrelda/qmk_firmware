@@ -5,7 +5,7 @@
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 #define _PDVORAK 0 // programmero dvorak base layer
-#define _SHIFTED_PDVORAK 1 
+#define _SHIFTED_PDVORAK 1
 #define _FN 10
 #define _LH_DEBUG 5
 #define _QWERTY 6
@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_PDVORAK] = LAYOUT_5x7(
         // left hand
        //LSFT(KC_4),            LSFT(KC_EQUAL),  KC_LBRC,   LSFT(KC_LBRC),  LSFT(KC_9),   LSFT(KC_7),  KC_EQUAL,
-//LBRC = left bracket , LCBR = left curly brace , LPRN = left parenthesis 
+//LBRC = left bracket , LCBR = left curly brace , LPRN = left parenthesis
         KC_DOLLAR,             KC_PLUS,         KC_LBRC,   KC_LCBR,        KC_LPRN,      KC_AMPERSAND, KC_EQUAL,
         KC_TAB,                KC_SEMICOLON,    KC_COMMA,  KC_DOT,         KC_P,         KC_Y,        TO(_LH_DEBUG),
         KC_ESCAPE,             KC_A,            KC_O,      KC_E,           KC_U,         KC_I,        TO(_FN),
@@ -77,8 +77,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SHIFTED_PDVORAK] = LAYOUT_5x7(
         // left hand
         LSFT(KC_4),  KC_1,                KC_2,            KC_3,          KC_4,        KC_5,        KC_EQUAL,
-        KC_TAB,      LSFT(KC_SEMICOLON),  LSFT(KC_COMMA),  LSFT(KC_DOT),  LSFT(KC_P),  LSFT(KC_Y),  TO(_QWERTY),
-        KC_ESCAPE,   LSFT(KC_A),          LSFT(KC_O),      LSFT(KC_E),    LSFT(KC_U),  LSFT(KC_I),  TO(_FN),
+        LSFT(KC_TAB),      LSFT(KC_SEMICOLON),  LSFT(KC_COMMA),  LSFT(KC_DOT),  LSFT(KC_P),  LSFT(KC_Y),  TO(_QWERTY),
+        LSFT(KC_ESCAPE),   LSFT(KC_A),          LSFT(KC_O),      LSFT(KC_E),    LSFT(KC_U),  LSFT(KC_I),  TO(_FN),
         KC_TRNS,     LSFT(KC_QUOTE),      LSFT(KC_Q),      LSFT(KC_J),    LSFT(KC_K),  LSFT(KC_X),
         KC_TRNS,     KC_TRNS,             LSFT(KC_LEFT),         LSFT(KC_RIGHT),
                                                                           KC_TRNS, KC_TRNS,
@@ -90,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LSFT(KC_GRAVE),      LSFT(KC_D),  LSFT(KC_H),  LSFT(KC_T),  LSFT(KC_N),  LSFT(KC_S),  LSFT(KC_MINUS),
                              LSFT(KC_B),  LSFT(KC_M),  LSFT(KC_W),  LSFT(KC_V),  LSFT(KC_Z),  KC_TRNS,
                                                        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
-                  KC_TRNS, KC_TRNS,  
+                  KC_TRNS, KC_TRNS,
                   KC_TRNS, KC_TRNS,
                   LSFT(KC_PGUP), LSFT(KC_PGDN)
     ),
@@ -117,8 +117,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_LH_DEBUG] = LAYOUT_5x7(
         // left hand
         _______,   _______,  _______,  _______,  _______,  _______,    _______,
-        _______,   LSFT(KC_F5), LCA(KC_B), _______,  KC_F5,  _______,    TO(_QWERTY),
-        _______,   KC_F5,    _______,  KC_F11,   KC_F10,  LSFT(KC_F11),  TO(_PDVORAK),
+        _______,   LSFT(KC_F5), LCA(KC_B), _______,  KC_F5,  _______,    TO(_PDVORAK),
+        _______,   _______,  _______,  LSFT(KC_F11),   KC_F10,  KC_F11,  TO(_QWERTY),
         _______,   _______,  _______,  _______,  _______,  _______,
         _______,   _______,  _______,  _______,
                                     _______, _______,
@@ -134,13 +134,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              _______, _______,
              _______, _______
     ),
-    
+
     //qwerty per the keycaps & a qwerty with double space on thumbs for games
     [_QWERTY] = LAYOUT_5x7(
         // left hand
         KC_MINUS,    KC_1,    KC_2,    KC_3,   KC_4,   KC_5,   KC_GRAVE,
         KC_TAB,      KC_Q,    KC_W,    KC_E,   KC_R,   KC_T,   TO(_PDVORAK),
-        KC_LCTL,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
+        KC_ESCAPE,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
         OSM(MOD_LSFT),   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
         TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_BACKSPACE,         KC_DELETE,
