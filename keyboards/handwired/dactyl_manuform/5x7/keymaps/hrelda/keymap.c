@@ -144,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MOD_LSFT,   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
         TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_BACKSPACE,         KC_DELETE,
-                                                         KC_LALT,  KC_LCTL,
+                                                        KC_LCTL,  KC_LALT,
                                                          KC_END,            KC_HOME,
         // right hand
                           KC_CALC, KC_6,    KC_7,    KC_8,     KC_9,     KC_0,     KC_EQUAL,
