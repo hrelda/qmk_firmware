@@ -49,21 +49,22 @@ void td_fn_shift_layer_toggle_on(tap_dance_state_t *state, void *user_data)
             layer_on(_SHIFTED_PDVORAK);
         break;
         case 2:
-            register_code(MOD_LSFT);
+            register_code(KC_LSFT);
         break;
     }
 }
 
-// void td_fn_shift_layer_toggle_off(tap_dance_state_t *state, void *user_data)
-// {
-//    layer_on(_PDVORAK);
-// }
+void td_fn_shift_layer_toggle_off(tap_dance_state_t *state, void *user_data)
+{
+   unregister_code(KC_LSFT);
+   layer_on(_PDVORAK);
+}
 
 tap_dance_action_t tap_dance_actions[] = {
     [TD_CAPS_WORD] = ACTION_TAP_DANCE_FN(td_fn_capsw_toggle),
     //[TD_CAPS_WORD] = ACTION_TAP_DANCE_DOUBLE(QK_CAPS_WORD_TOGGLE,KC_CAPS),
     [TD_RCTLALT]   = ACTION_TAP_DANCE_DOUBLE(KC_RCTL,KC_RALT),
-    [TD_MODVORARK_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(td_fn_shift_layer_toggle_on, NULL, NULL),
+    [TD_MODVORARK_SHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(td_fn_shift_layer_toggle_on, td_fn_shift_layer_toggle_off, td_fn_shift_layer_toggle_off),
 };
 
 
@@ -161,7 +162,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_MINUS,    KC_1,    KC_2,    KC_3,   KC_4,   KC_5,   KC_GRAVE,
         KC_TAB,      KC_Q,    KC_W,    KC_E,   KC_R,   KC_T,   TO(_PDVORAK),
         KC_ESCAPE,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
-        MOD_LSFT,   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
+        KC_LSFT,   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
         TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_BACKSPACE,      KC_DELETE,
                                                          KC_LCTL,           KC_LALT,
@@ -170,7 +171,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_CALC, KC_6,    KC_7,    KC_8,     KC_9,     KC_0,     KC_EQUAL,
                           KC_RBRC, KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     KC_BSLS,
                           _______, KC_H,    KC_J,    KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  MOD_RSFT,
+                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  KC_LSFT,
                                             KC_DOWN, KC_UP,    KC_LBRC,  KC_RBRC,
                   KC_ENTER,      KC_SPACE,
                   KC_LGUI,       KC_RCTL,
@@ -180,7 +181,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_MINUS,    KC_1,    KC_2,    KC_3,   KC_4,   KC_5,   KC_GRAVE,
         KC_TAB,      KC_Q,    KC_W,    KC_E,   KC_R,   KC_T,   TO(_PDVORAK),
         KC_ESCAPE,     KC_A,    KC_S,    KC_D,   KC_F,   KC_G,   TO(_FN),
-        MOD_LSFT,   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
+        KC_LSFT,   KC_Z,    KC_X,    KC_C,   KC_V,   KC_B,
         TT(_FN),    TD(TD_CAPS_WORD), KC_LEFT,   KC_RIGHT,
                                                          KC_SPACE,         KC_BACKSPACE,
                                                          KC_LCTL,          KC_LALT,
@@ -189,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_CALC, KC_6,    KC_7,    KC_8,     KC_9,     KC_0,     KC_EQUAL,
                           KC_RBRC, KC_Y,    KC_U,    KC_I,     KC_O,     KC_P,     KC_BSLS,
                           _______, KC_H,    KC_J,    KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  MOD_RSFT,
+                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,   KC_SLSH,  KC_LSFT,
                                             KC_DOWN, KC_UP,    KC_LBRC,  KC_RBRC,
                   KC_ENTER,      KC_SPACE,
                   KC_PGUP,       KC_PGDN,
